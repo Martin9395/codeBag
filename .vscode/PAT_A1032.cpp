@@ -1,36 +1,45 @@
 #include <cstdio>
-const int maxn = 10010;
-
-struct Node{
-    char data;//数据域
-    int next;//指针域
-    bool flag;//节点是否在第一条链表中出现  
+#include<stdlib.h>
+const int maxn = 100010;
+ 
+//定义链表
+struct Node {
+    int address, data, next;
+    int flag;
 } node[maxn];
-
-int main()
-{
-    for (int i = 0; i < maxn;i++){
-        node[i].flag = false;//默认均没有出现 -> 数据全是第二条链表的
-    }
-    int num, s1, s2; //s1,s2分别代表两条链表的首地址
-    int address, next;//节点地址与后继地址
-    char data;//存放数据
-    //printf("请输入两条链表的首地址和num数目:");
-    scanf("%d %d %d",&s1,&s2,&num);
-    //printf("循环输入node节点的信息：");
-    for (int i = 0; i < num; i++){
-        scanf("%d %c %d", &address,&data,&next);
+ 
+int main() {
+    //初始化
+    for(int i = 0; i < maxn; i++)
+        node[i].flag = 0;
+    //读取数据
+    int b1, b2, n;
+    int address, next;
+    char data;
+    scanf("%d %d %d", &b1, &b2, &n);
+    for(int i = 0; i < n; i++) {
+        scanf("%d %c %d", &address, &data, &next);
+        node[address].address = address;
         node[address].data = data;
         node[address].next = next;
     }
-    int pointer;
-    for (pointer = s1; pointer != -1; pointer = node[pointer].next){
-        node[pointer].flag = true;//枚举第一条链表的所有节点，令其出现次数为1
+    //遍历链表标记特殊性质，此题不需要统计有效结
+    for(int i=b1;i!=-1;i=node[i].next){
+        node[i].flag=1;
     }
-    for (pointer = s2; pointer != -1; pointer = node[pointer].next){
-        if(node[pointer].flag == true) break;
+    int flag=-1;
+    //此题不需要排序，直接进行第⑤步
+    for(int i=b2;i!=-1;i=node[i].next){
+        if(node[i].flag==1){
+            flag=i;
+            break;
+        }
     }
-    
-
-        return 0;
+    if(flag != -1)
+        printf("%05d", flag);
+    else
+        printf("-1\n", flag);
+    system("pause");
+    return 0;
 }
+
